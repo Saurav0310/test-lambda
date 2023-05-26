@@ -1,0 +1,41 @@
+materials:
+  - git: "https://github.com/Saurav0310/test-lambda.git"
+    branch: master
+
+pipelines:
+  - name: lambda-deployment
+    label_template: "lambda-${COUNT}"
+    materials:
+      - git: "https://github.com/Saurav0310/test-lambda.git"
+        branch: master
+    stages:
+      - name: build
+        jobs:
+          - name: build-lambda
+            tasks:
+              - exec:
+                  command: |
+                    # Replace with your build command
+                    zip -r lambda-deployment.zip .
+
+      - name: upload
+        jobs:
+          - name: upload-artifact
+            tasks:
+              - exec:
+                  command: |
+                    # Replace with your AWS CLI commands
+                    aws s3 cp lambda-deployment.zip s3://saurav-test-glacier/
+
+      - name: deploy
+        jobs:
+          - name: create-or-update-lambda
+            tasks:
+              - exec:
+                  command: |
+                    # Replace with your AWS CLI or CloudFormation commands
+                    if aws lambda get-function --function-name hello-test >/dev/null 2>&1; then
+                      aws lambda update-function-code --function-name hello-test --s3-bucket saurav-test-glacier --s3-key lambda-deployment.zip
+                    else
+                      aws lambda create-function --function-name hello-test --runtime python3.7 --role arn:aws:iam::123456789012:role/YourLambdaRole --handler index.handler --code S3Bucket=saurav-test-glacier,S3Key=lambda-deployment.zip
+                    fi
