@@ -1,13 +1,13 @@
-materials:
-  - git: "https://github.com/Saurav0310/test-lambda.git"
-    branch: master
-
+format_version: 3
 pipelines:
-  - name: lambda-deployment
-    label_template: "lambda-${COUNT}"
+  nightwatch-gocd-sample:
+    group: My-Pipelines
+    label_template: ${COUNT}
+    lock_behavior: none
+    display_order: -1
     materials:
       - git: "https://github.com/Saurav0310/test-lambda.git"
-        branch: master
+        branch: main
     stages:
       - name: build
         jobs:
