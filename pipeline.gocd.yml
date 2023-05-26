@@ -1,7 +1,6 @@
 format_version: 3
 pipelines:
-  nightwatch-gocd-sample:
-    group: My-Pipelines
+  lambda:
     label_template: ${COUNT}
     lock_behavior: none
     display_order: -1
