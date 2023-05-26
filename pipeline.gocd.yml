@@ -1,9 +1,7 @@
 format_version: 3
 pipelines:
-  lambda:
-    label_template: ${COUNT}
-    lock_behavior: none
-    display_order: -1
+  - name: lambda-deployment
+    label_template: "lambda-${COUNT}"
     materials:
       - git: "https://github.com/Saurav0310/test-lambda.git"
         branch: main
